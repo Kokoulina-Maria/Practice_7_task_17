@@ -22,7 +22,7 @@ namespace Practice_7_task_17
         }
 
         static void WriteMas(char[] masK)
-        {
+        {//вывод массива сочетания на экран
             for (int i = 0; i < masK.Length; i++)
             {
                 Console.Write(masK[i] + " ");
@@ -31,7 +31,7 @@ namespace Practice_7_task_17
         }
 
         static int Index(char[] masN, char x)
-        {
+        {//поиск номера элемента массива N с заданным значением
             int i = 0;
             while (masN[i] != x)
             {
@@ -42,21 +42,17 @@ namespace Practice_7_task_17
 
         static void Main(string[] args)
         {
+            Console.WriteLine("Генерация сочетаний из N элементов по K с повторениями");
             do
             {
-                Console.WriteLine("Генерация сочетаний из N элементов по K с повторениями");
                 int N;
-                int K;
                 do
                 {
                     N = ReadInt("Введите число N: ");
                     if ((N > 36) || (N == 1)) Console.WriteLine("N не должно превышать 32 и должно быть больше 1");
                 } while ((N > 36) || (N == 1));
-                do
-                {
-                    K = ReadInt("Введите число K: ");
-                    if (K > 10) Console.WriteLine("K не должно превышать 10");
-                } while (K > 10);
+
+                int K = ReadInt("Введите число K: ");
 
                 char[] masN = new char[N];//массив значений N
                 char[] masK = new char[K];//массив значений K
@@ -75,29 +71,29 @@ namespace Practice_7_task_17
 
                 Console.WriteLine("ОТВЕТ:");
 
-                WriteMas(masK);
-                int k = K - 1;
-                int min = 1;
+                WriteMas(masK);//выводим на экран K нулей
+                int k = K - 1;//номер последнего элемента массива K (для простоты обращения)
+                int min = 1;//номер элемента из массива N, который будет считаться минимальным для данного сочетания
                 do
                 {
-                    for (int l = min; l < N; l++)
+                    for (int l = min; l < N; l++)//прибаляем к последнему элементу единицу до тех пор, пока он не достигнет значения N-1
                     {
                         masK[k] = masN[l];
                         WriteMas(masK);
                     }
-                    for (int i = 1; i <= k; i++)
+                    for (int i = 1; i <= k; i++)//находим первый слева элемент, который равен элементу из массива N под номером N-1, заменяем элемент перед ним на больший на один, а также все последующие на данное значение
                     {
-                        if (masK[i] == masN[N - 1])
+                        if (masK[i] == masN[N - 1])//если элемент равен N-1
                         {
-                            masK[i - 1] = masN[Index(masN, masK[i - 1]) + 1];
-                            min = Index(masN, masK[i - 1]);
-                            for (int f = i; f <= k; f++)
+                            masK[i - 1] = masN[Index(masN, masK[i - 1]) + 1];//заменяем предыдущий на больший на 1
+                            min = Index(masN, masK[i - 1]);//минимальное значение становится равным предыдущему элементу
+                            for (int f = i; f <= k; f++)//все элементы после него заменяем на min
                                 masK[f] = masN[min];
                             break;
                         }
                     }
-                } while ((masK[0] != masN[N - 1]));
-                if (K > 1) WriteMas(masK);
+                } while ((masK[0] != masN[N - 1]));//пока первый элемент не станет равен элементу из массива N под номером N-1.
+                if (K > 1) WriteMas(masK);//выводим последний вариант
 
                 Console.ReadLine();
             } while (true);
